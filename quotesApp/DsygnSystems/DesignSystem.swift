@@ -29,6 +29,12 @@ public enum DesignSystem {
     enum Fonts {
         
         ///SF PRO Body / Regular / 17px
+        public static let bold24: UIFont = .systemFont(ofSize: 24, weight: .bold)
+        
+        ///SF PRO Body / Regular / 17px
+        public static let regular24: UIFont = .systemFont(ofSize: 24, weight: .regular)
+        
+        ///SF PRO Body / Regular / 17px
         public static let regular17: UIFont = .systemFont(ofSize: 17, weight: .regular)
         
         ///SF PRO Body / Regular / 15px

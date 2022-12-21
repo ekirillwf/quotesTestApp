@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         var window: UIWindow?
         
-        let viewController = ViewController()
+        let viewModel = QuotesViewModel()
+        let viewController = ViewController(viewModel: viewModel)
+        
         
         let rootVC = UINavigationController(rootViewController: viewController)
         
