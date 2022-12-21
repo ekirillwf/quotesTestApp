@@ -16,7 +16,29 @@ class QuotesViewModel {
     func changeQuoteData(data: QuotesModelCodable) {
         for index in 0..<quote.count {
             if quote[index].c == data.c {
-                quote[index] = data
+                if let c = data.c {
+                    quote[index].c = c
+                }
+                
+                if let chg = data.chg {
+                    quote[index].chg = chg
+                }
+                
+                if let pcp = data.pcp {
+                    quote[index].pcp = pcp
+                }
+                
+                if let ltp = data.ltp {
+                    quote[index].ltp = ltp
+                }
+                
+                if let name = data.name {
+                    quote[index].name = name
+                }
+                
+                if let ltr = data.ltr {
+                    quote[index].ltr = ltr
+                }
             }
         }
     }

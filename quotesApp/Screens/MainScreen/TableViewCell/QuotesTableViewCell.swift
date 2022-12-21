@@ -32,12 +32,14 @@ class QuotesTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let changingPercantageLabel: UILabel = {
-        let label = UILabel()
+    private let changingPercantageLabel: CustomLabel = {
+        let label = CustomLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = DesignSystem.Fonts.regular24
         label.textColor = DesignSystem.Colors.blackColor
         label.textAlignment = .left
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 5
         
         return label
     }()
@@ -51,7 +53,7 @@ class QuotesTableViewCell: UITableViewCell {
         
         return label
     }()
-
+    
     private let separatorView: UIView = {
         let separator = UIView()
         separator.backgroundColor = DesignSystem.Colors.separatorColor
@@ -75,24 +77,67 @@ class QuotesTableViewCell: UITableViewCell {
     //MARK: - Methods
     
     func update(model: QuotesModel) {
+        setupName(model: model)
+        setupDesc(model: model)
+        setupPercantage(model: model)
+        setupChangingLastDeal(model: model)
+    }
+    
+    func setupName(model: QuotesModel) {
         if let name = model.name {
             self.nameLabel.text = name
         }
-        
-        if let descLastFirst = model.descLastActive.0, let descLastSecond = model.descLastActive.1 {
-            self.descLabel.text = descLastFirst + " | " + descLastSecond
+    }
+    
+    func setupDesc(model: QuotesModel) {
+        if let descLastFirst = model.descLastActive.0 {
+            if let descLastSecond = model.descLastActive.1 {
+                self.descLabel.text = descLastFirst + " | " + descLastSecond
+            } else {
+                self.descLabel.text = descLastFirst
+            }
         }
-        
+    }
+    
+    func setupPercantage(model: QuotesModel) {
         if let changingPercantage = model.changingPercantage {
-            self.changingPercantageLabel.text = "\(changingPercantage)%"
-            
             self.changingPercantageLabel.textColor = changingPercantage >= 0
             ? DesignSystem.Colors.greenColor
             : DesignSystem.Colors.redColor
+            
+            self.changingPercantageLabel.text = changingPercantage >= 0 ? "+\(changingPercantage)% " : "\(changingPercantage)% "
+            
+            self.changingPercantageLabel.textWillChange = { (oldPercentage) in
+                
+                self.changingPercantageLabel.textColor = DesignSystem.Colors.whiteColor
+
+                self.changingPercantageLabel.textDidChange = { (newPercentage) in
+
+                    if newPercentage ?? "" > oldPercentage ?? "" {
+                        self.changingPercantageLabel.backgroundColor = DesignSystem.Colors.greenColor
+
+                    } else {
+                        self.changingPercantageLabel.backgroundColor = DesignSystem.Colors.redColor
+                    }
+                }
+            }
         }
-        
-        if let changingLastDeal = model.changingLastDeal {
-            self.changingLastDealLabel.text = "\(changingLastDeal)"
+    }
+    
+    func setupChangingLastDeal(model: QuotesModel) {
+        if let changingLastDealFirst = model.changingLastDeal.0 {
+            if let changingLastDealSecond = model.changingLastDeal.1 {
+                
+                let editedChangingLastDealSecond = changingLastDealSecond >= 0
+                ? "+\(changingLastDealSecond)% "
+                : "\(changingLastDealSecond)% "
+                
+                self.changingLastDealLabel.text = "\(changingLastDealFirst) (\(editedChangingLastDealSecond))"
+
+                
+            } else {
+                self.changingLastDealLabel.text = "\(changingLastDealFirst)"
+            }
         }
     }
     
@@ -126,9 +171,23 @@ class QuotesTableViewCell: UITableViewCell {
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(0.5)
         }
-
     }
-    
 }
 
 
+class CustomLabel: UILabel {
+    var textWillChange:((_ oldText: String?)->())? = nil
+    var textDidChange:((_ newText: String?)->())? = nil
+    override var text: String? {
+        willSet {
+            if textWillChange != nil {
+                textWillChange!(self.text)
+            }
+        }
+        didSet {
+            if textDidChange != nil {
+                textDidChange!(self.text)
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ struct QuotesModel {
     var name: String?
     var descLastActive: (String?, String?)
     var changingPercantage: Double?
-    var changingLastDeal: Double?
+    var changingLastDeal: (Double?, Double?)
 }
 
 enum QuotesType: String, CaseIterable {

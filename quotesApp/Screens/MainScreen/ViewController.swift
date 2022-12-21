@@ -97,7 +97,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 as? QuotesTableViewCell else { fatalError("fatal Error cell cannot be inited") }
         let model = viewModel.quote[indexPath.row]
         
-        let data = QuotesModel(name: model.c, descLastActive: (model.ltr, model.name), changingPercantage: model.chg, changingLastDeal: model.ltp)
+        let data = QuotesModel(name: model.c, descLastActive: (model.ltr, model.name), changingPercantage: model.chg, changingLastDeal: (model.ltp, model.pcp))
         
         cell.update(model: data)
         return cell
