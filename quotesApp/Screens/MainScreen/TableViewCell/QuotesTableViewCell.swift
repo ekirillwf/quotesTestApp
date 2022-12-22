@@ -105,7 +105,7 @@ class QuotesTableViewCell: UITableViewCell {
             ? DesignSystem.Colors.greenColor
             : DesignSystem.Colors.redColor
             
-            self.changingPercantageLabel.text = changingPercantage >= 0 ? "+\(changingPercantage)% " : "\(changingPercantage)% "
+            self.changingPercantageLabel.text = changingPercantage > 0 ? " +\(changingPercantage)% " : " \(changingPercantage)% "
             
             self.changingPercantageLabel.textWillChange = { (oldPercentage) in
                 
@@ -128,9 +128,9 @@ class QuotesTableViewCell: UITableViewCell {
         if let changingLastDealFirst = model.changingLastDeal.0 {
             if let changingLastDealSecond = model.changingLastDeal.1 {
                 
-                let editedChangingLastDealSecond = changingLastDealSecond >= 0
-                ? "+\(changingLastDealSecond)% "
-                : "\(changingLastDealSecond)% "
+                let editedChangingLastDealSecond = changingLastDealSecond > 0
+                ? "+\(changingLastDealSecond)"
+                : "\(changingLastDealSecond)"
                 
                 self.changingLastDealLabel.text = "\(changingLastDealFirst) (\(editedChangingLastDealSecond))"
 
@@ -143,7 +143,15 @@ class QuotesTableViewCell: UITableViewCell {
     
     func setupLayout() {
         
-        [nameLabel, descLabel, changingPercantageLabel, separatorView, changingLastDealLabel].forEach(contentView.addSubview)
+        [nameLabel, changingPercantageLabel, separatorView].forEach(contentView.addSubview)
+        
+        let bottomStackView = UIStackView(arrangedSubviews: [descLabel, changingLastDealLabel])
+        bottomStackView.axis = .horizontal
+        bottomStackView.translatesAutoresizingMaskIntoConstraints = false
+        bottomStackView.spacing = 8
+        bottomStackView.distribution = .equalSpacing
+        
+        contentView.addSubview(bottomStackView)
         
         nameLabel.snp.makeConstraints { (make) in
             make.top.leading.equalToSuperview().inset(16)
@@ -155,15 +163,10 @@ class QuotesTableViewCell: UITableViewCell {
             make.trailing.equalToSuperview().offset(-16)
         }
         
-        changingLastDealLabel.snp.makeConstraints{ (make) in
-            make.top.equalTo(changingPercantageLabel).inset(40)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-        
-        descLabel.snp.makeConstraints{ (make) in
-            make.top.equalTo(nameLabel).offset(40)
+        bottomStackView.snp.makeConstraints{ (make) in
+            make.top.equalTo(nameLabel).inset(40)
             make.leading.equalToSuperview().inset(16)
-            make.trailing.equalTo(changingLastDealLabel).offset(-16)
+            make.trailing.equalToSuperview().offset(-16)
         }
         
         separatorView.snp.makeConstraints { (make) in
@@ -175,19 +178,4 @@ class QuotesTableViewCell: UITableViewCell {
 }
 
 
-class CustomLabel: UILabel {
-    var textWillChange:((_ oldText: String?)->())? = nil
-    var textDidChange:((_ newText: String?)->())? = nil
-    override var text: String? {
-        willSet {
-            if textWillChange != nil {
-                textWillChange!(self.text)
-            }
-        }
-        didSet {
-            if textDidChange != nil {
-                textDidChange!(self.text)
-            }
-        }
-    }
-}
+

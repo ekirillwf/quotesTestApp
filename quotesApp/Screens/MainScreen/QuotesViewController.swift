@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  QuotesViewController.swift
 //  quotesApp
 //
 //  Created by Кирилл Елсуфьев on 20.12.2022.
@@ -9,14 +9,13 @@ import UIKit
 import SnapKit
 import Starscream
 
-class ViewController: UIViewController {
+class QuotesViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: QuotesViewModel
     var socket: WebSocket?
     
     // MARK: - Subviews
-    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -58,16 +57,15 @@ class ViewController: UIViewController {
         
         viewModel.request.timeoutInterval = 5
         
-        DispatchQueue.global().async {
-            self.socket = WebSocket(request: self.viewModel.request)
-            self.socket?.delegate = self
-            self.socket?.connect()
-        }
-        
+        self.socket = WebSocket(request: self.viewModel.request)
+        self.socket?.delegate = self
+        self.socket?.connect()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -87,7 +85,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension QuotesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.quote.count
     }
@@ -105,19 +103,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-extension ViewController: WebSocketDelegate {
+extension QuotesViewController: WebSocketDelegate {
     func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocket) {
         switch event {
         case .connected(let headers):
             viewModel.isConnected = true
             print("websocket is connected: \(headers)")
-            websocketDidConnect(socket!)
+            DispatchQueue.global().async {
+                guard let socket = self.socket else { return }
+                self.websocketDidConnect(socket)
+            }
         case .disconnected(let reason, let code):
             viewModel.isConnected = false
             print("websocket is disconnected: \(reason) with code: \(code)")
         case .text(let string):
             print("Received text: \(string)")
-            self.websocketDidReceiveMessage(self.socket!, text: string)
+            guard let socket = self.socket else { return }
+            self.websocketDidReceiveMessage(socket, text: string)
         case .binary(let data):
             print("Received data: \(data.count)")
         case .ping(_), .pong(_), .viabilityChanged(_), .reconnectSuggested(_):
@@ -136,7 +138,9 @@ extension ViewController: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(_ socket: Starscream.WebSocket, text: String) {
-        viewModel.updateQuotes(text: text)
+        DispatchQueue.main.async {
+            self.viewModel.updateQuotes(text: text)
+        }
     }
     
 }
