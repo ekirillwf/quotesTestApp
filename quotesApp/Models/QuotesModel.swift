@@ -74,7 +74,6 @@ final class QuotesModelCodable: Codable {
         name = try? container.decode(String?.self, forKey: .name)
         ltr = try? container.decode(String?.self, forKey: .ltr)
         pcp = try? container.decode(Double?.self, forKey: .pcp)
-        c = try? container.decode(String?.self, forKey: .c)
-
+        c = try? container.decode(String?.self, forKey: .c) 
     }
 }

@@ -11,7 +11,6 @@ import SnapKit
 class QuotesTableViewCell: UITableViewCell {
     
     //MARK: - Subviews
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +61,6 @@ class QuotesTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Initializers
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .white
@@ -75,7 +73,6 @@ class QuotesTableViewCell: UITableViewCell {
     }
     
     //MARK: - Methods
-    
     func update(model: QuotesModel) {
         setupName(model: model)
         setupDesc(model: model)
@@ -106,21 +103,6 @@ class QuotesTableViewCell: UITableViewCell {
             : DesignSystem.Colors.redColor
             
             self.changingPercantageLabel.text = changingPercantage > 0 ? " +\(changingPercantage)% " : " \(changingPercantage)% "
-            
-            self.changingPercantageLabel.textWillChange = { (oldPercentage) in
-                
-                self.changingPercantageLabel.textColor = DesignSystem.Colors.whiteColor
-
-                self.changingPercantageLabel.textDidChange = { (newPercentage) in
-
-                    if newPercentage ?? "" > oldPercentage ?? "" {
-                        self.changingPercantageLabel.backgroundColor = DesignSystem.Colors.greenColor
-
-                    } else {
-                        self.changingPercantageLabel.backgroundColor = DesignSystem.Colors.redColor
-                    }
-                }
-            }
         }
     }
     
@@ -132,9 +114,7 @@ class QuotesTableViewCell: UITableViewCell {
                 ? "+\(changingLastDealSecond)"
                 : "\(changingLastDealSecond)"
                 
-                self.changingLastDealLabel.text = "\(changingLastDealFirst) (\(editedChangingLastDealSecond))"
-
-                
+                self.changingLastDealLabel.text = "\(changingLastDealFirst) (\(editedChangingLastDealSecond))"  
             } else {
                 self.changingLastDealLabel.text = "\(changingLastDealFirst)"
             }
@@ -142,7 +122,6 @@ class QuotesTableViewCell: UITableViewCell {
     }
     
     func setupLayout() {
-        
         [nameLabel, changingPercantageLabel, separatorView].forEach(contentView.addSubview)
         
         let bottomStackView = UIStackView(arrangedSubviews: [descLabel, changingLastDealLabel])
@@ -176,6 +155,3 @@ class QuotesTableViewCell: UITableViewCell {
         }
     }
 }
-
-
-

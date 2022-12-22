@@ -8,17 +8,22 @@
 import UIKit
 
 class CustomLabel: UILabel {
-    var textWillChange:((_ oldText: String?)->())? = nil
-    var textDidChange:((_ newText: String?)->())? = nil
     override var text: String? {
-        willSet {
-            if textWillChange != nil {
-                textWillChange!(self.text)
-            }
-        }
         didSet {
-            if textDidChange != nil {
-                textDidChange!(self.text)
+            if let text = text {
+                if oldValue != text {
+                    let oldVal = (oldValue?.trim() ?? "").replacingText(replacingText: "%")
+                    let newVal = text.trim().replacingText(replacingText: "%")
+                    
+                    self.textColor = DesignSystem.Colors.whiteColor
+                    if Double(oldVal) ?? 0 <= Double(newVal) ?? 0 {
+                        self.backgroundColor = DesignSystem.Colors.greenColor
+                    } else {
+                        self.backgroundColor = DesignSystem.Colors.redColor
+                    }
+                } else {
+                    self.backgroundColor = .clear
+                }
             }
         }
     }

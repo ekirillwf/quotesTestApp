@@ -13,6 +13,10 @@ class QuotesViewModel {
     var request = URLRequest(url: URL(string: "wss://wss.tradernet.ru")!)
     var isConnected: Bool = false
     
+    func setupTimeoutInterval() {
+        request.timeoutInterval = 5
+    }
+    
     func changeQuoteData(data: QuotesModelCodable) {
         for index in 0..<quote.count {
             if quote[index].c == data.c {
@@ -44,7 +48,7 @@ class QuotesViewModel {
     }
     
     func updateQuotes(text: String) {
-        let data = replacingOccurrences(text: text).data(using: .utf8)!
+        let data = text.trim().replacingText(replacingText: "\"q\",").data(using: .utf8)!
         
         do {
             let f = try JSONDecoder().decode([QuotesModelCodable].self, from: data)
@@ -61,11 +65,5 @@ class QuotesViewModel {
         } catch {
             print(error)
         }
-    }
-    
-    func replacingOccurrences(text: String) -> String {
-        var string = text
-        string = string.replacingOccurrences(of: "\"q\",", with: "", options: [.caseInsensitive, .regularExpression])
-        return string
     }
 }

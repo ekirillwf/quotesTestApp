@@ -32,11 +32,11 @@ class QuotesViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-
+    
     init(viewModel: QuotesViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-
+        
     }
     
     required init?(coder: NSCoder) {
@@ -54,29 +54,28 @@ class QuotesViewController: UIViewController {
         super.viewDidLoad()
         
         setupLayout()
-        
-        viewModel.request.timeoutInterval = 5
-        
-        self.socket = WebSocket(request: self.viewModel.request)
-        self.socket?.delegate = self
-        self.socket?.connect()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
-
+        setupSocket()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         socket?.onEvent = { event in
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
-    func setupLayout() {
+    // MARK: - Private methods
+    private func setupSocket() {
+        viewModel.setupTimeoutInterval()
+        socket = WebSocket(request: viewModel.request)
+        socket?.delegate = self
+        socket?.connect()
+    }
+    
+    private func setupLayout() {
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { (make) in
@@ -85,6 +84,7 @@ class QuotesViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions
 extension QuotesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.quote.count
@@ -119,6 +119,7 @@ extension QuotesViewController: WebSocketDelegate {
         case .text(let string):
             print("Received text: \(string)")
             guard let socket = self.socket else { return }
+            self.tableView.reloadData()
             self.websocketDidReceiveMessage(socket, text: string)
         case .binary(let data):
             print("Received data: \(data.count)")
@@ -131,15 +132,17 @@ extension QuotesViewController: WebSocketDelegate {
     
     
     func websocketDidConnect(_ socket: Starscream.WebSocket) {
-        
         let array = QuotesType.allCases.map {  $0.rawValue }
         let message = "[\"realtimeQuotes\", \(array)]"
+        let quoteMessage = "[\"quotes\", \(array)]"
         socket.write(string: message)
+        socket.write(string: quoteMessage)
     }
     
     func websocketDidReceiveMessage(_ socket: Starscream.WebSocket, text: String) {
         DispatchQueue.main.async {
             self.viewModel.updateQuotes(text: text)
+            self.tableView.reloadData()
         }
     }
     

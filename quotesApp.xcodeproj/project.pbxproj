@@ -15,6 +15,7 @@
 		63CD971529533D0B00459C93 /* QuotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD971429533D0B00459C93 /* QuotesViewModel.swift */; };
 		63CD971E29535EC000459C93 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CD971D29535EC000459C93 /* Main.storyboard */; };
 		63CFDA9F2952CCF300014765 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 63CFDA9E2952CCF300014765 /* SnapKit */; };
+		63F3D9BD29541C1D0013BF04 /* Extension + String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3D9BC29541C1D0013BF04 /* Extension + String.swift */; };
 		63F3EEC72951F62E00B7364D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3EEC62951F62E00B7364D /* AppDelegate.swift */; };
 		63F3EEC92951F62E00B7364D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3EEC82951F62E00B7364D /* SceneDelegate.swift */; };
 		63F3EECB2951F62E00B7364D /* QuotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3EECA2951F62E00B7364D /* QuotesViewController.swift */; };
@@ -29,6 +30,7 @@
 		63CD970F2952D51F00459C93 /* QuotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesModel.swift; sourceTree = "<group>"; };
 		63CD971429533D0B00459C93 /* QuotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesViewModel.swift; sourceTree = "<group>"; };
 		63CD971D29535EC000459C93 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		63F3D9BC29541C1D0013BF04 /* Extension + String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + String.swift"; sourceTree = "<group>"; };
 		63F3EEC32951F62E00B7364D /* quotesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = quotesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F3EEC62951F62E00B7364D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63F3EEC82951F62E00B7364D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,14 @@
 			path = MainScreen;
 			sourceTree = "<group>";
 		};
+		63F3D9BB29541C0D0013BF04 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				63F3D9BC29541C1D0013BF04 /* Extension + String.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		63F3EEBA2951F62E00B7364D = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +145,7 @@
 				63F3EED42951F63000B7364D /* Info.plist */,
 				63CD971929535DF300459C93 /* Screens */,
 				638BA3972953F9E80076D15D /* Helpers */,
+				63F3D9BB29541C0D0013BF04 /* Extensions */,
 				63CD971A29535E0400459C93 /* Models */,
 				63CD971B29535E1400459C93 /* DesignSystems */,
 				63CD971C29535E2D00459C93 /* Resources */,
@@ -227,6 +238,7 @@
 				63CD97102952D51F00459C93 /* QuotesModel.swift in Sources */,
 				63F3EECB2951F62E00B7364D /* QuotesViewController.swift in Sources */,
 				63F3EEC72951F62E00B7364D /* AppDelegate.swift in Sources */,
+				63F3D9BD29541C1D0013BF04 /* Extension + String.swift in Sources */,
 				63F3EEC92951F62E00B7364D /* SceneDelegate.swift in Sources */,
 				63CD971529533D0B00459C93 /* QuotesViewModel.swift in Sources */,
 				638BA3992953F9F80076D15D /* CustomLabel.swift in Sources */,
